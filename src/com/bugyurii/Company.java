@@ -37,6 +37,14 @@ public class Company {
         return shopList.remove(shop);
     }
 
+    public boolean removeFactory(Factory factory){
+        return factoryList.remove(factory);
+    }
+
+    public boolean removeTransport(Transport transport){
+        return transportList.remove(transport);
+    }
+
     public void addFactory(Factory factory){
         factoryList.add(factory);
         factoryList = factoryList.stream()
@@ -51,13 +59,31 @@ public class Company {
                                     .collect(Collectors.toList());
     }
 
+    //region Gets
     public List<Shop> getShopsByName(String name){
         return shopList.stream().filter(x -> name.equals(x.getName())).collect(Collectors.toList());
+    }
+
+    public List<Factory> getFactoriesByName(String name){
+        return factoryList.stream().filter(x -> name.equals(x.getName())).collect(Collectors.toList());
+    }
+
+    public List<Transport> getTransportByName(String name){
+        return transportList.stream().filter(x -> name.equals(x.getName())).collect(Collectors.toList());
     }
 
     public Shop getShop(String name, Location loc){
         return shopList.stream().filter(x -> x.getLocation().equals(loc)&&x.getName().equals(name)).findFirst().get();
     }
+
+    public Transport getTransport(String certificate){
+        return transportList.stream().filter(x -> x.getVehicleCertificate().equals(certificate)).findFirst().get();
+    }
+
+    public Factory getFactory(String name, Location loc) {
+        return factoryList.stream().filter(x -> x.getLocation().equals(loc) && x.getName().equals(name)).findFirst().get();
+    }
+    //endregion
 
     //region get-set
     public List<Shop> getShopList() {

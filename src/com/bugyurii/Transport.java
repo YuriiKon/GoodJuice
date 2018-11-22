@@ -5,11 +5,11 @@ enum Status {  Deliver, Return, OnFactory}
 
 public class Transport {
 
-    final static Double SPEED = 2d;
+    private double speed = 2d;
 
     private Company company;
 
-    private String vehicle_certificate;
+    private String vehicleCertificate;
     private int capacity = 50;
     private String name = "unnamedTransport";
 
@@ -19,8 +19,8 @@ public class Transport {
     private int lastStatusDuration = 0;
     private Shop destinationShop;
 
-    public Transport(String vehicle_certificate, String name, Company company) {
-        this.vehicle_certificate = vehicle_certificate;
+    public Transport(String vehicleCertificate, String name, Company company) {
+        this.vehicleCertificate = vehicleCertificate;
         setName(name);
         setCompany(company);
         company.addTransport(this);
@@ -31,8 +31,8 @@ public class Transport {
         this.capacity = capacity;
     }
 
-    public String getVehicle_certificate() {
-        return vehicle_certificate;
+    public String getVehicleCertificate() {
+        return vehicleCertificate;
     }
 
     public int getCapacity() {
@@ -95,8 +95,12 @@ public class Transport {
         this.destinationShop = destinationShop;
     }
 
-    public static Double getSPEED() {
-        return SPEED;
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     //endregion
@@ -104,7 +108,7 @@ public class Transport {
     public void sendDeliver(Shop shop, Factory factory, int fullness){
         status = Status.Deliver;
         statusDuration = (int)(Math.ceil(Math.sqrt(Math.pow(shop.getLocation().getLatitude() - factory.getLocation().getLatitude(),2) +
-                Math.pow(shop.getLocation().getLongitude() - factory.getLocation().getLongitude(),2)))/SPEED);
+                Math.pow(shop.getLocation().getLongitude() - factory.getLocation().getLongitude(),2)))/ speed);
         lastStatusDuration = statusDuration;
         setFullness(fullness);
         setDestinationShop(shop);
@@ -136,17 +140,19 @@ public class Transport {
         if (this == o) return true;
         if (!(o instanceof Transport)) return false;
         Transport transport = (Transport) o;
-        return Objects.equals(getVehicle_certificate(), transport.getVehicle_certificate());
+        return Objects.equals(getVehicleCertificate(), transport.getVehicleCertificate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getVehicle_certificate());
+        return Objects.hash(getVehicleCertificate());
     }
 
     @Override
     public String toString() {
         return "TransportName : \'" + name + '\'' +
+                "\nCertificate : " + vehicleCertificate +
+                "\nSpeed : " + speed +
                 "\nCapacity : " + capacity +
                 "\nStatus " + status.name() +
                 (status!=Status.OnFactory?"\nStatus duration - "+ statusDuration:"") +
