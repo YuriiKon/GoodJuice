@@ -3,19 +3,19 @@ package com.bugyurii;
 import java.util.Objects;
 
 public class Location {
-    private Double latitude;
-    private Double longitude;
+    private double latitude;
+    private double longitude;
 
-    public Location(Double latitude, Double longitude) {
+    public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 

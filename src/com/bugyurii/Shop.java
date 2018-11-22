@@ -4,25 +4,55 @@ import java.util.Objects;
 
 public class Shop {
     private Location location;
-    private int selling_ability = 10;
-    private int storage_capacity;
-    private int storage_goods;
+
+    final static int PRICE = 20;
+
+    private int sellingAbility = 20;
+    private int storageCapacity = 100;
+    private int storageGoods = 60;
+    private int abstractStorageGoods = 60;
+
+    private int income = 0;
+
     private Company company;
+
     private String name = "unnamedShop";
+
+    public Shop(Location location, String name) {
+        this.location = location;
+        setName(name);
+    }
 
     public Shop(Location location, Company company, String name) {
         this.location = location;
-        this.company = company;
-        this.name = name;
+        setCompany(company);
+        setName(name);
+        company.addShop(this);
     }
 
-    public Shop(Location location, int storage_capacity, Company company, String name) {
+    public Shop(Location location, int storageCapacity, Company company, String name) {
         this.location = location;
-        this.storage_capacity = storage_capacity;
-        this.company = company;
-        this.name = name;
+        setStorageCapacity(storageCapacity);
+        setCompany(company);
+        setName(name);
+        company.addShop(this);
+        setStorageGoods(storageCapacity);
+        abstractStorageGoods = storageGoods;
+    }
+    public Shop skipDay(){
+        if(getStorageGoods() - getSellingAbility() > 0){
+            setIncome(getIncome() + getSellingAbility() * PRICE);
+            setAbstractStorageGoods(getAbstractStorageGoods() - getSellingAbility());
+            storageGoods = (getStorageGoods() - getSellingAbility());
+        }else{
+            setIncome(getIncome() + getStorageGoods() * PRICE);
+            setAbstractStorageGoods(getAbstractStorageGoods() - getStorageGoods());
+            storageGoods = (getStorageGoods()- getStorageGoods());
+        }
+        return this;
     }
 
+    //region get-set
     public String getName() {
         return name;
     }
@@ -31,20 +61,21 @@ public class Shop {
         this.name = name;
     }
 
-    public int getSelling_ability() {
-        return selling_ability;
+    public int getSellingAbility() {
+        return sellingAbility;
     }
 
-    public void setSelling_ability(int selling_ability) {
-        this.selling_ability = selling_ability;
+    public void setSellingAbility(int sellingAbility) {
+        this.sellingAbility = sellingAbility;
     }
 
-    public int getStorage_goods() {
-        return storage_goods;
+    public int getStorageGoods() {
+        return storageGoods;
     }
 
-    public void setStorage_goods(int storage_goods) {
-        this.storage_goods = storage_goods;
+    public void setStorageGoods(int storageGoods) {
+        this.storageGoods = storageGoods;
+        abstractStorageGoods = storageGoods;
     }
 
     public Company getCompany() {
@@ -55,21 +86,46 @@ public class Shop {
         this.company = company;
     }
 
-    public int getStorage_capacity() {
-        return storage_capacity;
+    public int getStorageCapacity() {
+        return storageCapacity;
     }
 
-    public void setStorage_capacity(int storage_capacity) {
-        this.storage_capacity = storage_capacity;
+    public void setStorageCapacity(int storageCapacity) {
+        this.storageCapacity = storageCapacity;
     }
 
     public Location getLocation() {
         return location;
     }
 
+    public int getAbstractStorageGoods() {
+        return abstractStorageGoods;
+    }
+
+    public void setAbstractStorageGoods(int abstractStorageGoods) {
+        this.abstractStorageGoods = abstractStorageGoods;
+    }
+
+    public int getIncome() {
+        return income;
+    }
+
+    public void setIncome(int income) {
+        this.income = income;
+    }
+
+    //endregion
+
     @Override
     public String toString() {
-        return  "ShopName= '" + name + '\'' + " " + location + " " + company;
+        return  "ShopName= '" + getName() + '\'' +
+                "\nIncome : " + getIncome()  + " \u20BD" +
+                "\nSelling ability " + getSellingAbility() +
+                "\nStorage Capacity : " + getStorageCapacity() +
+                "\nJuice in stock : " + getStorageGoods() +
+                (getAbstractStorageGoods() - getStorageGoods()>0?"\nJuice on the way : "+(getAbstractStorageGoods() - getStorageGoods()):"") + "\n" +
+                getLocation() + "\n" +
+                getCompany();
     }
 
     @Override

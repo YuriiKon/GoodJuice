@@ -5,14 +5,18 @@ import java.util.Objects;
 public class Factory {
 
     private Location location;
-    private int production;
-    private int warehouse;
+
+    private int production = 20;
+    private int warehouseCapacity = 500;
+    private int warehouseGoods = warehouseCapacity/5;
+
     private String name = "unnamedFactory";
+
     private Company company;
 
     public Factory(Location location, String name) {
         this.location = location;
-        this.name = name;
+        setName(name);
     }
     public Factory(Location location, Company company) {
         this.location = location;
@@ -22,17 +26,20 @@ public class Factory {
 
     public Factory(Location location, Company company, String name) {
         this.location = location;
-        this.company = company;
-        this.name = name;
+        setCompany(company);
+        company.addFactory(this);
+        setName(name);
     }
 
-    public Factory(Location location, int warehouse, String name, Company company) {
+    public Factory(Location location, int warehouseCapacity, String name, Company company) {
         this.location = location;
-        this.warehouse = warehouse;
-        this.name = name;
-        this.company = company;
+        setWarehouseCapacity(warehouseCapacity);
+        setName(name);
+        setCompany(company);
+        company.addFactory(this);
     }
 
+    //region get-set
     public Location getLocation() {
         return location;
     }
@@ -45,12 +52,20 @@ public class Factory {
         this.production = production;
     }
 
-    public int getWarehouse() {
-        return warehouse;
+    public int getWarehouseCapacity() {
+        return warehouseCapacity;
     }
 
-    public void setWarehouse(int warehouse) {
-        this.warehouse = warehouse;
+    public void setWarehouseCapacity(int warehouseCapacity) {
+        this.warehouseCapacity = warehouseCapacity;
+    }
+
+    public int getWarehouseGoods() {
+        return warehouseGoods;
+    }
+
+    public void setWarehouseGoods(int warehouseGoods) {
+        this.warehouseGoods = warehouseGoods;
     }
 
     public String getName() {
@@ -68,10 +83,21 @@ public class Factory {
     public void setCompany(Company company) {
         this.company = company;
     }
+    //endregion
+
+    public Factory skipDay(){
+        if(getWarehouseGoods()+getProduction()>getWarehouseCapacity())setWarehouseGoods(getWarehouseCapacity());
+        else setWarehouseGoods(getWarehouseGoods()+getProduction());
+        return this;
+    }
 
     @Override
     public String toString() {
-        return " FactoryName= '" + name + '\'' + " " + location;
+        return " FactoryName= '" + name + '\'' + " " +
+                "Capacity : " + warehouseCapacity + "\n" +
+                "Goods in warehouse : " + warehouseGoods + "\n" +
+                "Production : " + production + "\n" +
+                location + "\n";
 
     }
 
