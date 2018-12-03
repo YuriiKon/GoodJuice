@@ -1,4 +1,4 @@
-package com.bugyurii;
+package com.bugyurii.Entities;
 
 import java.util.Objects;
 

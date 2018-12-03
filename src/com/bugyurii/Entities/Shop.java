@@ -1,11 +1,13 @@
-package com.bugyurii;
+package com.bugyurii.Entities;
+
+import com.bugyurii.BLL.CompanyService;
 
 import java.util.Objects;
 
 public class Shop {
     private Location location;
 
-    final static int PRICE = 20;
+    private int price = 20;
 
     private int sellingAbility = 20;
     private int storageCapacity = 100;
@@ -27,7 +29,8 @@ public class Shop {
         this.location = location;
         setCompany(company);
         setName(name);
-        company.addShop(this);
+        CompanyService cs = new CompanyService(company);
+        cs.addShop(this);
     }
 
     public Shop(Location location, int storageCapacity, Company company, String name) {
@@ -35,21 +38,10 @@ public class Shop {
         setStorageCapacity(storageCapacity);
         setCompany(company);
         setName(name);
-        company.addShop(this);
+        CompanyService cs = new CompanyService(company);
+        cs.addShop(this);
         setStorageGoods(storageCapacity);
         abstractStorageGoods = storageGoods;
-    }
-    public Shop skipDay(){
-        if(getStorageGoods() - getSellingAbility() > 0){
-            setIncome(getIncome() + getSellingAbility() * PRICE);
-            setAbstractStorageGoods(getAbstractStorageGoods() - getSellingAbility());
-            storageGoods = (getStorageGoods() - getSellingAbility());
-        }else{
-            setIncome(getIncome() + getStorageGoods() * PRICE);
-            setAbstractStorageGoods(getAbstractStorageGoods() - getStorageGoods());
-            storageGoods = (getStorageGoods()- getStorageGoods());
-        }
-        return this;
     }
 
     //region get-set
@@ -112,6 +104,10 @@ public class Shop {
 
     public void setIncome(int income) {
         this.income = income;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     //endregion

@@ -1,29 +1,28 @@
-package com.bugyurii;
+package com.bugyurii.Entities;
+
+import com.bugyurii.BLL.CompanyService;
 
 import java.util.Objects;
-enum Status {  Deliver, Return, OnFactory}
 
 public class Transport {
-
-    private double speed = 2d;
-
-    private Company company;
-
-    private String vehicleCertificate;
-    private int capacity = 50;
     private String name = "unnamedTransport";
-
+    private String vehicleCertificate;
+    private double speed = 2d;
+    private int capacity = 50;
     private int fullness = 0;
-    private Status status = Status.OnFactory;
     private int statusDuration = 0;
     private int lastStatusDuration = 0;
+
+    private Status status = Status.OnFactory;
     private Shop destinationShop;
+    private Company company;
 
     public Transport(String vehicleCertificate, String name, Company company) {
         this.vehicleCertificate = vehicleCertificate;
         setName(name);
         setCompany(company);
-        company.addTransport(this);
+        CompanyService cs = new CompanyService(company);
+        cs.addTransport(this);
     }
 
     //region get-set
@@ -105,35 +104,7 @@ public class Transport {
 
     //endregion
 
-    public void sendDeliver(Shop shop, Factory factory, int fullness){
-        status = Status.Deliver;
-        statusDuration = (int)(Math.ceil(Math.sqrt(Math.pow(shop.getLocation().getLatitude() - factory.getLocation().getLatitude(),2) +
-                Math.pow(shop.getLocation().getLongitude() - factory.getLocation().getLongitude(),2)))/ speed);
-        lastStatusDuration = statusDuration;
-        setFullness(fullness);
-        setDestinationShop(shop);
-    }
 
-    public Transport skipDay(){
-        if(getStatusDuration() > 0)setStatusDuration(getStatusDuration()-1);
-        else {
-            switch (status) {
-                case Deliver: {
-                    setStatus(Status.Return);
-                    setStatusDuration(getLastStatusDuration());
-                    setFullness(0);
-                    getDestinationShop().setStorageGoods(getDestinationShop().getAbstractStorageGoods());
-                    break;
-                }
-                case Return: {
-                    setStatus(Status.OnFactory);
-                    setLastStatusDuration(0);
-                    break;
-                }
-            }
-        }
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {

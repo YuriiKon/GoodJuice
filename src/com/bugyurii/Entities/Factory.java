@@ -1,4 +1,6 @@
-package com.bugyurii;
+package com.bugyurii.Entities;
+
+import com.bugyurii.BLL.CompanyService;
 
 import java.util.Objects;
 
@@ -21,13 +23,15 @@ public class Factory {
     public Factory(Location location, Company company) {
         this.location = location;
         setCompany(company);
-        company.addFactory(this);
+        CompanyService cs = new CompanyService(company);
+        cs.addFactory(this);
     }
 
     public Factory(Location location, Company company, String name) {
         this.location = location;
         setCompany(company);
-        company.addFactory(this);
+        CompanyService cs = new CompanyService(company);
+        cs.addFactory(this);
         setName(name);
     }
 
@@ -36,7 +40,8 @@ public class Factory {
         setWarehouseCapacity(warehouseCapacity);
         setName(name);
         setCompany(company);
-        company.addFactory(this);
+        CompanyService cs = new CompanyService(company);
+        cs.addFactory(this);
     }
 
     //region get-set
@@ -84,12 +89,6 @@ public class Factory {
         this.company = company;
     }
     //endregion
-
-    public Factory skipDay(){
-        if(getWarehouseGoods()+getProduction()>getWarehouseCapacity())setWarehouseGoods(getWarehouseCapacity());
-        else setWarehouseGoods(getWarehouseGoods()+getProduction());
-        return this;
-    }
 
     @Override
     public String toString() {
